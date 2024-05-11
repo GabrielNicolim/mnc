@@ -1,7 +1,5 @@
-def calculateDeterminant(order, matrix):
-    if len(matrix) != order or any(len(row) != order for row in matrix):
-        raise ValueError("The matrix is not square")
-
+# Questão 01
+def CalculoDeterminante(order, matrix):
     if order == 1:
         return matrix[0][0]
 
@@ -9,6 +7,22 @@ def calculateDeterminant(order, matrix):
     for j in range(order):
         minor = [row[:j] + row[j+1:] for row in matrix[1:]]
 
-        determinant += (-1) ** j * matrix[0][j] * calculateDeterminant(order - 1, minor)
+        determinant += (-1) ** j * matrix[0][j] * CalculoDeterminante(order - 1, minor)
 
     return determinant
+
+# Questão 02
+
+def SistemaTriangularInferior(order, matrix, vector):
+    solution = [0] * order
+
+    for i in range(order):
+        solution[i] = vector[i]
+
+        for j in range(i):
+            solution[i] -= matrix[i][j] * solution[j]
+
+        solution[i] /= matrix[i][i]
+
+    return solution
+
