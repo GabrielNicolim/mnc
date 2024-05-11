@@ -26,3 +26,16 @@ def SistemaTriangularInferior(order, matrix, vector):
 
     return solution
 
+# Questão 03
+
+def SistemaTriangularSuperior(order, matrix, vector):
+    solution = [0] * order
+    for i in range(order - 1, -1, -1):
+        solution[i] = vector[i]
+
+        for j in range(i + 1, order):
+            solution[i] -= matrix[i][j] * solution[j]
+
+        solution[i] /= matrix[i][i]
+
+    return solution
