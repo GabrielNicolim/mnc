@@ -203,3 +203,6 @@ def Jacobi(order, matrix, vector, initial_guess, tolerance, max_iterations):
 
     return x_new, iterations
 
+# Questão 09
+
+
