@@ -1,3 +1,5 @@
+import numpy as np
+
 # Questão 01
 def CalculoDeterminante(order, matrix):
     if order == 1:
@@ -86,4 +88,32 @@ def DecomposicaoLU(order, matrix, vector):
 
 # Questão 05
 
+def Cholesky(order, matrix, vector):
+    L = np.zeros((order, order))
 
+    for i in range(order):
+        for j in range(i + 1):
+            if i == j:
+                L[i][j] = np.sqrt(matrix[i][i] - sum(L[i][k] ** 2 for k in range(j)))
+            else:
+                L[i][j] = (matrix[i][j] - sum(L[i][k] * L[j][k] for k in range(j))) / L[j][j]
+
+    LT = np.transpose(L)
+    y = np.zeros(order)
+    x = np.zeros(order)
+
+    for i in range(order):
+        y[i] = vector[i]
+        for j in range(i):
+            y[i] -= L[i][j] * y[j]
+        y[i] /= L[i][i]
+
+    for i in range(order - 1, -1, -1):
+        x[i] = y[i]
+        for j in range(i + 1, order):
+            x[i] -= LT[i][j] * x[j]
+        x[i] /= LT[i][i]
+
+    return x
+
+# Questão 06
