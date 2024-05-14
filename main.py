@@ -104,16 +104,51 @@ def Cholesky(order, matrix, vector):
 
     for i in range(order):
         y[i] = vector[i]
+
         for j in range(i):
             y[i] -= L[i][j] * y[j]
+
         y[i] /= L[i][i]
 
     for i in range(order - 1, -1, -1):
         x[i] = y[i]
+
         for j in range(i + 1, order):
             x[i] -= LT[i][j] * x[j]
+
         x[i] /= LT[i][i]
 
     return x
 
 # Questão 06
+
+def GaussCompact(order, matrix, vector):
+    for i in range(order):
+        max_index = i
+        max_value = abs(matrix[i][i])
+
+        for j in range(i + 1, order):
+            if abs(matrix[j][i]) > max_value:
+                max_value = abs(matrix[j][i])
+                max_index = j
+
+        matrix[i], matrix[max_index] = matrix[max_index], matrix[i]
+        vector[i], vector[max_index] = vector[max_index], vector[i]
+
+        for j in range(i + 1, order):
+            factor = matrix[j][i] / matrix[i][i]
+            vector[j] -= factor * vector[i]
+
+            for k in range(i, order):
+                matrix[j][k] -= factor * matrix[i][k]
+
+    solution = [0] * order
+    for i in range(order - 1, -1, -1):
+        solution[i] = vector[i]
+
+        for j in range(i + 1, order):
+            solution[i] -= matrix[i][j] * solution[j]
+
+        solution[i] /= matrix[i][i]
+
+    return solution
