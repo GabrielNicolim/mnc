@@ -152,3 +152,54 @@ def GaussCompact(order, matrix, vector):
         solution[i] /= matrix[i][i]
 
     return solution
+
+# Questão 07
+
+def GaussJordan(order, matrix, vector):
+    for i in range(order):
+        pivot = matrix[i][i]
+
+        for j in range(order):
+            matrix[i][j] /= pivot
+
+        vector[i] /= pivot
+
+        for j in range(order):
+            if i != j:
+                factor = matrix[j][i]
+
+                for k in range(order):
+                    matrix[j][k] -= factor * matrix[i][k]
+
+                vector[j] -= factor * vector[i]
+
+    return vector
+
+# Questão 08
+
+def Jacobi(order, matrix, vector, initial_guess, tolerance, max_iterations):
+    x = np.array(initial_guess)
+
+    x_new = np.zeros(order)
+
+    iterations = 0
+
+    while iterations < max_iterations:
+        for i in range(order):
+            sum_ = 0
+
+            for j in range(order):
+                if i != j:
+                    sum_ += matrix[i][j] * x[j]
+
+            x_new[i] = (vector[i] - sum_) / matrix[i][i]
+
+        if np.linalg.norm(x_new - x) < tolerance:
+            return x_new, iterations + 1
+
+        x = x_new.copy()
+
+        iterations += 1
+
+    return x_new, iterations
+
