@@ -32,6 +32,7 @@ def SistemaTriangularInferior(order, matrix, vector):
 
 def SistemaTriangularSuperior(order, matrix, vector):
     solution = [0] * order
+
     for i in range(order - 1, -1, -1):
         solution[i] = vector[i]
 
@@ -88,6 +89,18 @@ def DecomposicaoLU(order, matrix, vector):
 
 # Questão 05
 
+def transposeMatrix(matrix):
+    rows = len(matrix)
+    cols = len(matrix[0])
+
+    transposed = [[0] * rows for _ in range(cols)]
+
+    for i in range(rows):
+        for j in range(cols):
+            transposed[j][i] = matrix[i][j]
+
+    return transposed
+
 def Cholesky(order, matrix, vector):
     L = np.zeros((order, order))
 
@@ -98,7 +111,8 @@ def Cholesky(order, matrix, vector):
             else:
                 L[i][j] = (matrix[i][j] - sum(L[i][k] * L[j][k] for k in range(j))) / L[j][j]
 
-    LT = np.transpose(L)
+    LT = transposeMatrix(L)
+
     y = np.zeros(order)
     x = np.zeros(order)
 
