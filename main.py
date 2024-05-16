@@ -1,5 +1,34 @@
 import numpy as np
 
+while True:
+    print("1 - Calculo Determinante")
+    print("2 - Sistema TriangularInferior")
+    print("3 - Sistema TriangularSuperior")
+    print("4 - Decomposicao LU")
+    print("5 - Cholesky")
+    print("6 - Gauss Compacto")
+    print("7 - Gauss Jordan")
+    print("8 - Jacobi")
+    print("9 - Gauss Seidel")
+    print("10 - Matriz Inversa")
+
+    x = input("Escolha sua opção: ")
+    x = int(x)
+
+    if x == 1:
+    elif x == 2:
+    elif x == 3:
+    elif x == 4:
+    elif x == 5:
+    elif x == 6:
+    elif x == 7:
+    elif x == 8:
+    elif x == 9:
+    elif x == 10:
+    else:
+        print("\nPrograma encerrado\n")
+        exit()
+
 # Questão 01
 def CalculoDeterminante(order, matrix):
     if order == 1:
@@ -136,7 +165,7 @@ def Cholesky(order, matrix, vector):
 
 # Questão 06
 
-def GaussCompact(order, matrix, vector):
+def GaussCompacto(order, matrix, vector):
     for i in range(order):
         maxIndex = i
         maxValue = abs(matrix[i][i])
