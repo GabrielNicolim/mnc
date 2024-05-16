@@ -138,16 +138,16 @@ def Cholesky(order, matrix, vector):
 
 def GaussCompact(order, matrix, vector):
     for i in range(order):
-        max_index = i
-        max_value = abs(matrix[i][i])
+        maxIndex = i
+        maxValue = abs(matrix[i][i])
 
         for j in range(i + 1, order):
-            if abs(matrix[j][i]) > max_value:
-                max_value = abs(matrix[j][i])
-                max_index = j
+            if abs(matrix[j][i]) > maxValue:
+                maxValue = abs(matrix[j][i])
+                maxIndex = j
 
-        matrix[i], matrix[max_index] = matrix[max_index], matrix[i]
-        vector[i], vector[max_index] = vector[max_index], vector[i]
+        matrix[i], matrix[maxIndex] = matrix[maxIndex], matrix[i]
+        vector[i], vector[maxIndex] = vector[maxIndex], vector[i]
 
         for j in range(i + 1, order):
             factor = matrix[j][i] / matrix[i][i]
@@ -191,32 +191,59 @@ def GaussJordan(order, matrix, vector):
 
 # Questão 08
 
-def Jacobi(order, matrix, vector, initial_guess, tolerance, max_iterations):
-    x = np.array(initial_guess)
+def Jacobi(order, matrix, vector, initialGuess, tolerance, maxIterations):
+    x = np.array(initialGuess)
 
-    x_new = np.zeros(order)
+    newX = np.zeros(order)
 
     iterations = 0
 
-    while iterations < max_iterations:
+    while iterations < maxIterations:
         for i in range(order):
-            sum_ = 0
+            totalSum = 0
 
             for j in range(order):
                 if i != j:
-                    sum_ += matrix[i][j] * x[j]
+                    totalSum += matrix[i][j] * x[j]
 
-            x_new[i] = (vector[i] - sum_) / matrix[i][i]
+            newX[i] = (vector[i] - totalSum) / matrix[i][i]
 
-        if np.linalg.norm(x_new - x) < tolerance:
-            return x_new, iterations + 1
+        if np.linalg.norm(newX - x) < tolerance:
+            return newX, iterations + 1
 
-        x = x_new.copy()
+        x = newX.copy()
 
         iterations += 1
 
-    return x_new, iterations
+    return newX, iterations
 
 # Questão 09
+
+def GaussSeidel(order, matrix, vector, initialGuess, tolerance, maxIterations):
+    x = np.array(initialGuess)
+
+    iterations = 0
+
+    while iterations < maxIterations:
+        newX = np.copy(x)
+
+        for i in range(order):
+            totalSum = 0
+
+            for j in range(order):
+                if i != j:
+                    totalSum += matrix[i][j] * newX[j]
+
+            newX[i] = (vector[i] - totalSum) / matrix[i][i]
+
+        if np.linalg.norm(newX - x, ord = np.inf) < tolerance:
+            return newX, iterations + 1
+
+        x = newX
+        iterations += 1
+
+    return newX, iterations
+
+# Questão 10
 
 
