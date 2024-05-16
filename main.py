@@ -246,4 +246,31 @@ def GaussSeidel(order, matrix, vector, initialGuess, tolerance, maxIterations):
 
 # Questão 10
 
+def MatrizInversa(order, matrix):
+    identity = [[float(i == j) for i in range(order)] for j in range(order)]
 
+    augmented_matrix = [row + identity_row for row, identity_row in zip(matrix, identity)]
+
+    for i in range(order):
+        if augmented_matrix[i][i] == 0:
+            for j in range(i + 1, order):
+                if augmented_matrix[j][i] != 0:
+                    augmented_matrix[i], augmented_matrix[j] = augmented_matrix[j], augmented_matrix[i]
+
+                    break
+
+        pivot = augmented_matrix[i][i]
+
+        for j in range(2 * order):
+            augmented_matrix[i][j] /= pivot
+
+        for j in range(order):
+            if j != i:
+                factor = augmented_matrix[j][i]
+
+                for k in range(2 * order):
+                    augmented_matrix[j][k] -= factor * augmented_matrix[i][k]
+
+    inverse = [row[order:] for row in augmented_matrix]
+
+    return inverse
