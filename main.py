@@ -1,14 +1,14 @@
 import numpy as np
 
 def getOrder():
-    order = int(input("Digite a ordem da matriz: "))
+    order = int(input("\nDigite a ordem da matriz: "))
 
     return order
 
 def getMatrix(order):
     matrix = []
 
-    print("Digite os elementos da matriz:")
+    print("\nDigite os elementos da matriz")
 
     for i in range(order):
         row = []
@@ -24,7 +24,7 @@ def getMatrix(order):
 def getVector(order):
     vector = []
 
-    print("Digite os termos independentes:")
+    print("\nDigite os termos independentes")
 
     for i in range(order):
         element = int(input(f"Digite o termo independente da equação {i+1}: "))
@@ -32,6 +32,16 @@ def getVector(order):
         vector.append(element)
 
     return vector
+
+def showDeterminat(determinant):
+    print("\nDeterminante: ", determinant)
+
+    input()
+
+def showVector(vector):
+    print("\nVetor: ", vector)
+
+    input()
 
 def transposeMatrix(matrix):
     rows = len(matrix)
@@ -319,68 +329,83 @@ while True:
     print("8 - Jacobi")
     print("9 - Gauss Seidel")
     print("10 - Matriz Inversa")
+    print("Outros - Encerra o programa")
 
-    option = int(input("Escolha sua opção: "))
+    option = int(input("\nEscolha sua opção: "))
 
     if option == 1:
         order = getOrder()
         matrix = getMatrix(order)
 
-        CalculoDeterminante(order, matrix)
+        determinant = CalculoDeterminante(order, matrix)
+
+        showDeterminat(determinant)
     elif option == 2:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
 
-        SistemaTriangularInferior(order, matrix, vector)
+        vectorSolution = SistemaTriangularInferior(order, matrix, vector)
+
+        showVector(vectorSolution)
     elif option == 3:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
 
-        SistemaTriangularSuperior(order, matrix, vector)
+        vectorSolution = SistemaTriangularSuperior(order, matrix, vector)
+
+        showVector(vectorSolution)
     elif option == 4:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
 
-        DecomposicaoLU(order, matrix, vector)
+        vectorSolution = DecomposicaoLU(order, matrix, vector)
+
+        showVector(vectorSolution)
     elif option == 5:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
 
-        Cholesky(order, matrix, vector)
+        vectorSolution = Cholesky(order, matrix, vector)
+
+        showVector(vectorSolution)
     elif option == 6:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
 
-        GaussCompacto(order, matrix, vector)
+        vectorSolution = GaussCompacto(order, matrix, vector)
+
+        showVector(vectorSolution)
     elif option == 7:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
 
-        GaussJordan(order, matrix, vector)
+        vectorSolution = GaussJordan(order, matrix, vector)
+
+        showVector(vectorSolution)
     elif option == 8:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
 
-        Jacobi(order, matrix, vector)
+        # Jacobi(order, matrix, vector)
     elif option == 9:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
 
-        GaussSeidel(order, matrix, vector)
+        # GaussSeidel(order, matrix, vector)
     elif option == 10:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
 
-        MatrizInversa(order, matrix)
+        # MatrizInversa(order, matrix)
     else:
-        print("\nPrograma encerrado\n")
+        print("\nPrograma encerrado")
         exit()
