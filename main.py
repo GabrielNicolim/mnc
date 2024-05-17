@@ -61,6 +61,7 @@ def CalculoDeterminante(order, matrix):
         return matrix[0][0]
 
     determinant = 0
+
     for j in range(order):
         minor = [row[:j] + row[j+1:] for row in matrix[1:]]
 
