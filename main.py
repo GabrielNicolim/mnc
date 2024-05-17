@@ -1,33 +1,49 @@
 import numpy as np
 
-while True:
-    print("1 - Calculo Determinante")
-    print("2 - Sistema TriangularInferior")
-    print("3 - Sistema TriangularSuperior")
-    print("4 - Decomposicao LU")
-    print("5 - Cholesky")
-    print("6 - Gauss Compacto")
-    print("7 - Gauss Jordan")
-    print("8 - Jacobi")
-    print("9 - Gauss Seidel")
-    print("10 - Matriz Inversa")
+def getOrder():
+    order = int(input("Digite a ordem da matriz: "))
 
-    x = input("Escolha sua opção: ")
-    x = int(x)
+    return order
 
-    if x == 1:
-    elif x == 2:
-    elif x == 3:
-    elif x == 4:
-    elif x == 5:
-    elif x == 6:
-    elif x == 7:
-    elif x == 8:
-    elif x == 9:
-    elif x == 10:
-    else:
-        print("\nPrograma encerrado\n")
-        exit()
+def getMatrix(order):
+    matrix = []
+
+    print("Digite os elementos da matriz:")
+
+    for i in range(order):
+        row = []
+
+        for j in range(order):
+            element = int(input(f"Digite o elemento da posição [{i + 1}][{j + 1}]: "))
+            row.append(element)
+
+        matrix.append(row)
+
+    return matrix
+
+def getVector(order):
+    vector = []
+
+    print("Digite os termos independentes:")
+
+    for i in range(order):
+        element = int(input(f"Digite o termo independente da equação {i+1}: "))
+
+        vector.append(element)
+
+    return vector
+
+def transposeMatrix(matrix):
+    rows = len(matrix)
+    cols = len(matrix[0])
+
+    transposed = [[0] * rows for _ in range(cols)]
+
+    for i in range(rows):
+        for j in range(cols):
+            transposed[j][i] = matrix[i][j]
+
+    return transposed
 
 # Questão 01
 def CalculoDeterminante(order, matrix):
@@ -117,18 +133,6 @@ def DecomposicaoLU(order, matrix, vector):
     return x
 
 # Questão 05
-
-def transposeMatrix(matrix):
-    rows = len(matrix)
-    cols = len(matrix[0])
-
-    transposed = [[0] * rows for _ in range(cols)]
-
-    for i in range(rows):
-        for j in range(cols):
-            transposed[j][i] = matrix[i][j]
-
-    return transposed
 
 def Cholesky(order, matrix, vector):
     L = np.zeros((order, order))
@@ -265,7 +269,7 @@ def GaussSeidel(order, matrix, vector, initialGuess, tolerance, maxIterations):
 
             newX[i] = (vector[i] - totalSum) / matrix[i][i]
 
-        if np.linalg.norm(newX - x, ord = np.inf) < tolerance:
+        if np.linalg.norm(newX - x, np.inf) < tolerance:
             return newX, iterations + 1
 
         x = newX
@@ -303,3 +307,80 @@ def MatrizInversa(order, matrix):
     inverse = [row[order:] for row in augmented_matrix]
 
     return inverse
+
+while True:
+    print("1 - Calculo Determinante")
+    print("2 - Sistema TriangularInferior")
+    print("3 - Sistema TriangularSuperior")
+    print("4 - Decomposicao LU")
+    print("5 - Cholesky")
+    print("6 - Gauss Compacto")
+    print("7 - Gauss Jordan")
+    print("8 - Jacobi")
+    print("9 - Gauss Seidel")
+    print("10 - Matriz Inversa")
+
+    option = int(input("Escolha sua opção: "))
+
+    if option == 1:
+        order = getOrder()
+        matrix = getMatrix(order)
+
+        CalculoDeterminante(order, matrix)
+    elif option == 2:
+        order = getOrder()
+        matrix = getMatrix(order)
+        vector = getVector(order)
+
+        SistemaTriangularInferior(order, matrix, vector)
+    elif option == 3:
+        order = getOrder()
+        matrix = getMatrix(order)
+        vector = getVector(order)
+
+        SistemaTriangularSuperior(order, matrix, vector)
+    elif option == 4:
+        order = getOrder()
+        matrix = getMatrix(order)
+        vector = getVector(order)
+
+        DecomposicaoLU(order, matrix, vector)
+    elif option == 5:
+        order = getOrder()
+        matrix = getMatrix(order)
+        vector = getVector(order)
+
+        Cholesky(order, matrix, vector)
+    elif option == 6:
+        order = getOrder()
+        matrix = getMatrix(order)
+        vector = getVector(order)
+
+        GaussCompacto(order, matrix, vector)
+    elif option == 7:
+        order = getOrder()
+        matrix = getMatrix(order)
+        vector = getVector(order)
+
+        GaussJordan(order, matrix, vector)
+    elif option == 8:
+        order = getOrder()
+        matrix = getMatrix(order)
+        vector = getVector(order)
+
+        Jacobi(order, matrix, vector)
+    elif option == 9:
+        order = getOrder()
+        matrix = getMatrix(order)
+        vector = getVector(order)
+
+        GaussSeidel(order, matrix, vector)
+    elif option == 10:
+        order = getOrder()
+        matrix = getMatrix(order)
+        vector = getVector(order)
+
+        MatrizInversa(order, matrix)
+    else:
+        print("\nPrograma encerrado\n")
+        exit()
