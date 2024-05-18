@@ -14,7 +14,7 @@ def getMatrix(order):
         row = []
 
         for j in range(order):
-            element = int(input(f"Digite o elemento da posição [{i + 1}][{j + 1}]: "))
+            element = float(input(f"Digite o elemento da posição [{i + 1}][{j + 1}]: "))
             row.append(element)
 
         matrix.append(row)
@@ -27,7 +27,7 @@ def getVector(order):
     print("\nDigite os termos independentes")
 
     for i in range(order):
-        element = int(input(f"Digite o termo independente da equação {i+1}: "))
+        element = float(input(f"Digite o termo independente da equação {i+1}: "))
 
         vector.append(element)
 
@@ -39,14 +39,14 @@ def getInitialGuess(order):
     print("\nDigite os termos da aproximação inicial para a solução")
 
     for i in range(order):
-        element = int(input(f"Digite o termo da aproximação inicial {i+1}: "))
+        element = float(input(f"Digite o termo da aproximação inicial {i+1}: "))
 
         vector.append(element)
 
     return vector
 
 def getTolerance():
-    tolerance = int(input("\nDigite a precisão desejada: "))
+    tolerance = float(input("\nDigite a precisão desejada: "))
 
     return tolerance
 
