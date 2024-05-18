@@ -253,7 +253,7 @@ def GaussJordan(order, matrix, vector):
 # Questão 08
 
 def Jacobi(order, matrix, vector, initialGuess, tolerance, maxIterations):
-    new_guess = np.zeros(order)
+    new_guess = [0.0] * order
 
     iterations = 0
 
@@ -267,10 +267,12 @@ def Jacobi(order, matrix, vector, initialGuess, tolerance, maxIterations):
 
             new_guess[i] = (vector[i] - total) / matrix[i][i]
 
-        if np.linalg.norm(new_guess - initialGuess) < tolerance:
+        norm = sum((new_guess[i] - initialGuess[i]) ** 2 for i in range(order)) ** 0.5
+
+        if norm < tolerance:
             return new_guess, iterations + 1
 
-        x = new_guess.copy()
+        initialGuess = new_guess[:]
 
         iterations += 1
 
@@ -293,7 +295,7 @@ def GaussSeidel(order, matrix, vector, initialGuess, tolerance, maxIterations):
         if max(abs(new_guess[i] - initialGuess[i]) for i in range(order)) < tolerance:
             return new_guess, j
 
-        initialGuess = new_guess
+        initialGuess = new_guess[:]
 
     return initialGuess, maxIterations
 
