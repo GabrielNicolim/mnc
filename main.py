@@ -172,7 +172,6 @@ def DecomposicaoLU(order, matrix, vector):
                 L[k][i] = (matrix[k][i] - sum) / U[i][i]
 
     y = [0] * order
-    x = [0] * order
 
     for i in range(order):
         y[i] = vector[i]
@@ -330,14 +329,8 @@ def MatrizInversa(order, matrix):
         if (type < 1 or type > 2):
             continue
 
-        matrixSolution = np.zeros(order)
-
-        vector = getVector(order)
-
         if (type == 1):
-            matrixSolution = DecomposicaoLU(order, matrix, vector)
         elif (type == 2):
-            matrixSolution = GaussCompacto(order, matrix, vector)
 
         return matrixSolution
 
