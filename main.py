@@ -81,7 +81,7 @@ def showMatrix(matrix):
 
 
 def showIterations(iterations):
-    print('\n Iterações: ', iterations)
+    print('\nIterações: ', iterations)
 
     input()
 
@@ -98,6 +98,13 @@ def transposeMatrix(matrix):
 
     return transposed
 
+def getIdentity(order):
+    identity = [[0 for _ in range(order)] for _ in range(order)]
+
+    for i in range(order):
+        identity[i][i] = 1
+
+    return identity
 
 # Questão 01
 def CalculoDeterminante(order, matrix):
@@ -171,13 +178,7 @@ def DecomposicaoLU(order, matrix, vector):
 
                 L[k][i] = (matrix[k][i] - sum) / U[i][i]
 
-    y = [0] * order
-
-    for i in range(order):
-        y[i] = vector[i]
-
-        for j in range(i):
-            y[i] -= L[i][j] * y[j]
+    y = SistemaTriangularInferior(order, L, vector)
 
     return SistemaTriangularSuperior(order, U, y)
 
@@ -196,16 +197,7 @@ def Cholesky(order, matrix, vector):
 
     LT = transposeMatrix(L)
 
-    y = np.zeros(order)
-    x = np.zeros(order)
-
-    for i in range(order):
-        y[i] = vector[i]
-
-        for j in range(i):
-            y[i] -= L[i][j] * y[j]
-
-        y[i] /= L[i][i]
+    y = SistemaTriangularInferior(order, L, vector)
 
     return SistemaTriangularSuperior(order, LT, y)
 
@@ -261,58 +253,49 @@ def GaussJordan(order, matrix, vector):
 # Questão 08
 
 def Jacobi(order, matrix, vector, initialGuess, tolerance, maxIterations):
-    x = np.array(initialGuess)
-
-    newX = np.zeros(order)
+    new_guess = np.zeros(order)
 
     iterations = 0
 
     while iterations < maxIterations:
         for i in range(order):
-            totalSum = 0
+            total = 0
 
             for j in range(order):
                 if i != j:
-                    totalSum += matrix[i][j] * x[j]
+                    total += matrix[i][j] * initialGuess[j]
 
-            newX[i] = (vector[i] - totalSum) / matrix[i][i]
+            new_guess[i] = (vector[i] - total) / matrix[i][i]
 
-        if np.linalg.norm(newX - x) < tolerance:
-            return newX, iterations + 1
+        if np.linalg.norm(new_guess - initialGuess) < tolerance:
+            return new_guess, iterations + 1
 
-        x = newX.copy()
+        x = new_guess.copy()
 
         iterations += 1
 
-    return newX, iterations
+    return new_guess, iterations
 
 
 # Questão 09
 
 def GaussSeidel(order, matrix, vector, initialGuess, tolerance, maxIterations):
-    x = np.array(initialGuess)
-
-    iterations = 0
-
-    while iterations < maxIterations:
-        newX = np.copy(x)
+    for j in range(maxIterations):
+        new_guess = initialGuess[:]
 
         for i in range(order):
-            totalSum = 0
+            soma1 = sum(matrix[i][j] * new_guess[j] for j in range(i))
 
-            for j in range(order):
-                if i != j:
-                    totalSum += matrix[i][j] * newX[j]
+            soma2 = sum(matrix[i][j] * initialGuess[j] for j in range(i + 1, order))
 
-            newX[i] = (vector[i] - totalSum) / matrix[i][i]
+            new_guess[i] = (vector[i] - soma1 - soma2) / matrix[i][i]
 
-        if np.linalg.norm(newX - x, np.inf) < tolerance:
-            return newX, iterations + 1
+        if max(abs(new_guess[i] - initialGuess[i]) for i in range(order)) < tolerance:
+            return new_guess, j
 
-        x = newX
-        iterations += 1
+        initialGuess = new_guess
 
-    return newX, iterations
+    return initialGuess, maxIterations
 
 
 # Questão 10
@@ -329,8 +312,56 @@ def MatrizInversa(order, matrix):
         if (type < 1 or type > 2):
             continue
 
+        matrixSolution = np.zeros(order, order)
+
         if (type == 1):
+            L = [[0.0] * order for _ in range(order)]
+            U = [[0.0] * order for _ in range(order)]
+
+            identity = getIdentity(order)
+
+            for i in range(order):
+                L[i][i] = 1.0
+
+                for j in range(i, order):
+                    total = sum(L[i][k] * U[k][j] for k in range(i))
+
+                    U[i][j] = matrix[i][j] - total
+                for j in range(i + 1, order):
+                    total = sum(L[j][k] * U[k][i] for k in range(i))
+
+                    L[j][i] = (matrix[j][i] - total) / U[i][i]
+
+            reverse = []
+            for col in range(order):
+                y = SistemaTriangularInferior(order, L, [identity[row][col] for row in range(order)])
+
+                x = SistemaTriangularSuperior(order, U, y)
+
+                reverse.append(x)
+
+            matrixSolution = transposeMatrix(reverse)
         elif (type == 2):
+            identity = getIdentity(order)
+
+            A = [row[:] for row in matrix]
+
+            for i in range(order):
+                A[i].extend(identity[i])
+
+            for i in range(order):
+                pivot = A[i][i]
+
+                for j in range(2 * order):
+                    A[i][j] /= pivot
+
+                for k in range(order):
+                    if k != i:
+                        factor = A[k][i]
+                        for j in range(2 * order):
+                            A[k][j] -= factor * A[i][j]
+
+            matrixSolution = [A[i][order:] for i in range(order)]
 
         return matrixSolution
 
@@ -410,10 +441,11 @@ while True:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
+        initialGuess = getInitialGuess(order)
         tolerance = getTolerance()
         maxIterations = getMaxIterations()
 
-        vectorSolution, iterationsSolution = Jacobi(order, matrix, vector, tolerance, maxIterations)
+        vectorSolution, iterationsSolution = Jacobi(order, matrix, vector, initialGuess, tolerance, maxIterations)
 
         showVector(vectorSolution)
         showIterations(iterationsSolution)
@@ -421,10 +453,11 @@ while True:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
+        initialGuess = getInitialGuess(order)
         tolerance = getTolerance()
         maxIterations = getMaxIterations()
 
-        vectorSolution, iterationsSolution = GaussSeidel(order, matrix, vector, tolerance, maxIterations)
+        vectorSolution, iterationsSolution = GaussSeidel(order, matrix, vector, initialGuess, tolerance, maxIterations)
 
         showVector(vectorSolution)
         showIterations(iterationsSolution)
