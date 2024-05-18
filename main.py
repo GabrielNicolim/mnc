@@ -43,6 +43,12 @@ def showVector(vector):
 
     input()
 
+def showMatrix(matrix):
+    for row in matrix:
+        for element in row:
+            print(element, end=' ')
+        print()
+
 def transposeMatrix(matrix):
     rows = len(matrix)
     cols = len(matrix[0])
@@ -291,35 +297,30 @@ def GaussSeidel(order, matrix, vector, initialGuess, tolerance, maxIterations):
 # Questão 10
 
 def MatrizInversa(order, matrix):
-    identity = [[float(i == j) for i in range(order)] for j in range(order)]
+    print("Escolha como deseja calcular")
 
-    augmented_matrix = [row + identity_row for row, identity_row in zip(matrix, identity)]
+    while True:
+        print("\n1 - Método de decomposição LU")
+        print("2 - Método de Gauss Compacto")
 
-    for i in range(order):
-        if augmented_matrix[i][i] == 0:
-            for j in range(i + 1, order):
-                if augmented_matrix[j][i] != 0:
-                    augmented_matrix[i], augmented_matrix[j] = augmented_matrix[j], augmented_matrix[i]
+        type = int(input("\nEscolha sua opção: "))
 
-                    break
+        if(type < 1 or type > 2):
+            continue
 
-        pivot = augmented_matrix[i][i]
+        matrixSolution = np.zeros(order)
 
-        for j in range(2 * order):
-            augmented_matrix[i][j] /= pivot
+        vector = getVector(order)
 
-        for j in range(order):
-            if j != i:
-                factor = augmented_matrix[j][i]
+        if(type == 1):
+            matrixSolution = DecomposicaoLU(order, matrix, vector)
+        elif(type == 2):
+            matrixSolution = GaussCompacto(order, matrix, vector)
 
-                for k in range(2 * order):
-                    augmented_matrix[j][k] -= factor * augmented_matrix[i][k]
-
-    inverse = [row[order:] for row in augmented_matrix]
-
-    return inverse
+        return matrixSolution
 
 while True:
+    print("Escolha o que deseja calcular")
     print("1 - Calculo Determinante")
     print("2 - Sistema TriangularInferior")
     print("3 - Sistema TriangularSuperior")
@@ -404,9 +405,10 @@ while True:
     elif option == 10:
         order = getOrder()
         matrix = getMatrix(order)
-        vector = getVector(order)
 
-        # MatrizInversa(order, matrix)
+        matrixSolution = MatrizInversa(order, matrix)
+
+        showVector(matrixSolution)
     else:
         print("\nPrograma encerrado")
         exit()
