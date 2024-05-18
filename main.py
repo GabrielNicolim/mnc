@@ -33,6 +33,28 @@ def getVector(order):
 
     return vector
 
+def getInitialGuess(order):
+    vector = []
+
+    print("\nDigite os termos da aproximação inicial para a solução")
+
+    for i in range(order):
+        element = int(input(f"Digite o termo da aproximação inicial {i+1}: "))
+
+        vector.append(element)
+
+    return vector
+
+def getTolerance():
+    tolerance = int(input("\nDigite a precisão desejada: "))
+
+    return tolerance
+
+def getMaxIterations():
+    maxIterations = int(input("\nDigite o número máximo de iterações: "))
+
+    return maxIterations
+
 def showDeterminat(determinant):
     print("\nDeterminante: ", determinant)
 
@@ -44,10 +66,14 @@ def showVector(vector):
     input()
 
 def showMatrix(matrix):
-    for row in matrix:
-        for element in row:
-            print(element, end=' ')
-        print()
+    print("\nMatrix: ", matrix)
+
+    input()
+
+def showIterations(iterations):
+    print('\n Iterações: ', iterations)
+
+    input()
 
 def transposeMatrix(matrix):
     rows = len(matrix)
@@ -394,14 +420,24 @@ while True:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
+        tolerance = getTolerance()
+        maxIterations = getMaxIterations()
 
-        # Jacobi(order, matrix, vector)
+        vectorSolution, iterationsSolution = Jacobi(order, matrix, vector, tolerance, maxIterations)
+
+        showVector(vectorSolution)
+        showIterations(iterationsSolution)
     elif option == 9:
         order = getOrder()
         matrix = getMatrix(order)
         vector = getVector(order)
+        tolerance = getTolerance()
+        maxIterations = getMaxIterations()
 
-        # GaussSeidel(order, matrix, vector)
+        vectorSolution, iterationsSolution = GaussSeidel(order, matrix, vector, tolerance, maxIterations)
+
+        showVector(vectorSolution)
+        showIterations(iterationsSolution)
     elif option == 10:
         order = getOrder()
         matrix = getMatrix(order)
