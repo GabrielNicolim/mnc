@@ -1,9 +1,11 @@
 import numpy as np
 
+
 def getOrder():
     order = int(input("\nDigite a ordem da matriz: "))
 
     return order
+
 
 def getMatrix(order):
     matrix = []
@@ -21,17 +23,19 @@ def getMatrix(order):
 
     return matrix
 
+
 def getVector(order):
     vector = []
 
     print("\nDigite os termos independentes")
 
     for i in range(order):
-        element = float(input(f"Digite o termo independente da equação {i+1}: "))
+        element = float(input(f"Digite o termo independente da equação {i + 1}: "))
 
         vector.append(element)
 
     return vector
+
 
 def getInitialGuess(order):
     vector = []
@@ -39,41 +43,48 @@ def getInitialGuess(order):
     print("\nDigite os termos da aproximação inicial para a solução")
 
     for i in range(order):
-        element = float(input(f"Digite o termo da aproximação inicial {i+1}: "))
+        element = float(input(f"Digite o termo da aproximação inicial {i + 1}: "))
 
         vector.append(element)
 
     return vector
+
 
 def getTolerance():
     tolerance = float(input("\nDigite a precisão desejada: "))
 
     return tolerance
 
+
 def getMaxIterations():
     maxIterations = int(input("\nDigite o número máximo de iterações: "))
 
     return maxIterations
+
 
 def showDeterminat(determinant):
     print("\nDeterminante: ", determinant)
 
     input()
 
+
 def showVector(vector):
     print("\nVetor: ", vector)
 
     input()
+
 
 def showMatrix(matrix):
     print("\nMatrix: ", matrix)
 
     input()
 
+
 def showIterations(iterations):
     print('\n Iterações: ', iterations)
 
     input()
+
 
 def transposeMatrix(matrix):
     rows = len(matrix)
@@ -87,6 +98,7 @@ def transposeMatrix(matrix):
 
     return transposed
 
+
 # Questão 01
 def CalculoDeterminante(order, matrix):
     if order == 1:
@@ -95,11 +107,12 @@ def CalculoDeterminante(order, matrix):
     determinant = 0
 
     for j in range(order):
-        minor = [row[:j] + row[j+1:] for row in matrix[1:]]
+        minor = [row[:j] + row[j + 1:] for row in matrix[1:]]
 
         determinant += (-1) ** j * matrix[0][j] * CalculoDeterminante(order - 1, minor)
 
     return determinant
+
 
 # Questão 02
 
@@ -116,6 +129,7 @@ def SistemaTriangularInferior(order, matrix, vector):
 
     return solution
 
+
 # Questão 03
 
 def SistemaTriangularSuperior(order, matrix, vector):
@@ -130,6 +144,7 @@ def SistemaTriangularSuperior(order, matrix, vector):
         solution[i] /= matrix[i][i]
 
     return solution
+
 
 # Questão 04
 
@@ -167,6 +182,7 @@ def DecomposicaoLU(order, matrix, vector):
 
     return SistemaTriangularSuperior(order, U, y)
 
+
 # Questão 05
 
 def Cholesky(order, matrix, vector):
@@ -194,6 +210,7 @@ def Cholesky(order, matrix, vector):
 
     return SistemaTriangularSuperior(order, LT, y)
 
+
 # Questão 06
 
 def GaussCompacto(order, matrix, vector):
@@ -218,6 +235,7 @@ def GaussCompacto(order, matrix, vector):
 
     return SistemaTriangularSuperior(order, matrix, vector)
 
+
 # Questão 07
 
 def GaussJordan(order, matrix, vector):
@@ -239,6 +257,7 @@ def GaussJordan(order, matrix, vector):
                 vector[j] -= factor * vector[i]
 
     return vector
+
 
 # Questão 08
 
@@ -268,6 +287,7 @@ def Jacobi(order, matrix, vector, initialGuess, tolerance, maxIterations):
 
     return newX, iterations
 
+
 # Questão 09
 
 def GaussSeidel(order, matrix, vector, initialGuess, tolerance, maxIterations):
@@ -295,6 +315,7 @@ def GaussSeidel(order, matrix, vector, initialGuess, tolerance, maxIterations):
 
     return newX, iterations
 
+
 # Questão 10
 
 def MatrizInversa(order, matrix):
@@ -306,19 +327,20 @@ def MatrizInversa(order, matrix):
 
         type = int(input("\nEscolha sua opção: "))
 
-        if(type < 1 or type > 2):
+        if (type < 1 or type > 2):
             continue
 
         matrixSolution = np.zeros(order)
 
         vector = getVector(order)
 
-        if(type == 1):
+        if (type == 1):
             matrixSolution = DecomposicaoLU(order, matrix, vector)
-        elif(type == 2):
+        elif (type == 2):
             matrixSolution = GaussCompacto(order, matrix, vector)
 
         return matrixSolution
+
 
 while True:
     print("Escolha o que deseja calcular")
