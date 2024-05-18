@@ -165,15 +165,7 @@ def DecomposicaoLU(order, matrix, vector):
         for j in range(i):
             y[i] -= L[i][j] * y[j]
 
-    for i in range(order - 1, -1, -1):
-        x[i] = y[i]
-
-        for j in range(i + 1, order):
-            x[i] -= U[i][j] * x[j]
-
-        x[i] /= U[i][i]
-
-    return x
+    return SistemaTriangularSuperior(order, U, y)
 
 # Questão 05
 
@@ -200,15 +192,7 @@ def Cholesky(order, matrix, vector):
 
         y[i] /= L[i][i]
 
-    for i in range(order - 1, -1, -1):
-        x[i] = y[i]
-
-        for j in range(i + 1, order):
-            x[i] -= LT[i][j] * x[j]
-
-        x[i] /= LT[i][i]
-
-    return x
+    return SistemaTriangularSuperior(order, LT, y)
 
 # Questão 06
 
@@ -232,16 +216,7 @@ def GaussCompacto(order, matrix, vector):
             for k in range(i, order):
                 matrix[j][k] -= factor * matrix[i][k]
 
-    solution = [0] * order
-    for i in range(order - 1, -1, -1):
-        solution[i] = vector[i]
-
-        for j in range(i + 1, order):
-            solution[i] -= matrix[i][j] * solution[j]
-
-        solution[i] /= matrix[i][i]
-
-    return solution
+    return SistemaTriangularSuperior(order, matrix, vector)
 
 # Questão 07
 
