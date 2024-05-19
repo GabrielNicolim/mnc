@@ -286,11 +286,11 @@ def GaussSeidel(order, matrix, vector, initialGuess, tolerance, maxIterations):
         new_guess = initialGuess[:]
 
         for i in range(order):
-            soma1 = sum(matrix[i][j] * new_guess[j] for j in range(i))
+            sum1 = sum(matrix[i][j] * new_guess[j] for j in range(i))
 
-            soma2 = sum(matrix[i][j] * initialGuess[j] for j in range(i + 1, order))
+            sum2 = sum(matrix[i][j] * initialGuess[j] for j in range(i + 1, order))
 
-            new_guess[i] = (vector[i] - soma1 - soma2) / matrix[i][i]
+            new_guess[i] = (vector[i] - sum1 - sum2) / matrix[i][i]
 
         if max(abs(new_guess[i] - initialGuess[i]) for i in range(order)) < tolerance:
             return new_guess, j
